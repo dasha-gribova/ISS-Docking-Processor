@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Проект
+*.log
+*.cache
+*.pid
+*.seed
+*.pid.lock
+
+# Данные (большие файлы не загружаем на GitHub)
+/Users/darya/Desktop/archive/
+/Users/darya/Desktop/iss_results/
+*.zip
+*.tar
+*.gz
