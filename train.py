@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-ИСПРАВЛЕННОЕ обучение на текущих данных из iss_results
-Конвертирует формат разметки в правильный для YOLO
-"""
 import os
 import shutil
 import random
@@ -37,8 +32,8 @@ class TrainOnCurrentData:
         self.dataset_path = self.output_path / 'dataset'
         self.dataset_path.mkdir(exist_ok=True)
 
-        print(f"📁 Результаты обучения: {self.output_path}")
-        print(f"📁 Временный датасет: {self.dataset_path}")
+        print(f"Результаты обучения: {self.output_path}")
+        print(f"Временный датасет: {self.dataset_path}")
 
     def convert_label_format(self, input_label_file, output_label_file):
         """
@@ -76,14 +71,14 @@ class TrainOnCurrentData:
         Подготовка датасета из существующих файлов с конвертацией формата
         """
         print("\n" + "=" * 60)
-        print("🔄 ПОДГОТОВКА ДАТАСЕТА")
+        print("ПОДГОТОВКА ДАТАСЕТА")
         print("=" * 60)
 
         # Получаем все файлы разметки
         label_files = sorted(self.results_path.glob("*.txt"))
         label_files = [f for f in label_files if f.stem.isdigit()]
 
-        print(f"✅ Найдено {len(label_files)} файлов разметки")
+        print(f"Найдено {len(label_files)} файлов разметки")
 
         # Проверяем наличие соответствующих изображений
         valid_pairs = []
@@ -97,10 +92,10 @@ class TrainOnCurrentData:
                     img_found = True
                     break
 
-        print(f"✅ Найдено {len(valid_pairs)} пар изображение-разметка")
+        print(f"Найдено {len(valid_pairs)} пар изображение-разметка")
 
         if len(valid_pairs) < 10:
-            print("❌ Слишком мало данных для обучения")
+            print("Слишком мало данных для обучения")
             return None
 
         # Перемешиваем
@@ -111,7 +106,7 @@ class TrainOnCurrentData:
         train_pairs = valid_pairs[:train_count]
         val_pairs = valid_pairs[train_count:]
 
-        print(f"\n📊 Разделение датасета:")
+        print(f"\nРазделение датасета:")
         print(f"   Train: {len(train_pairs)} изображений")
         print(f"   Val: {len(val_pairs)} изображений")
 
@@ -125,7 +120,7 @@ class TrainOnCurrentData:
             dir_path.mkdir(exist_ok=True, parents=True)
 
         # Копируем и конвертируем файлы
-        print("\n📋 Копирование и конвертация файлов...")
+        print("\nКопирование и конвертация файлов...")
 
         converted_count = 0
         error_count = 0
@@ -157,14 +152,14 @@ class TrainOnCurrentData:
             if self.convert_label_format(label_file, dst_label):
                 converted_count += 1
 
-        print(f"✅ Конвертировано {converted_count} файлов разметки")
-        print("✅ Датасет готов!")
+        print(f"Конвертировано {converted_count} файлов разметки")
+        print("Датасет готов!")
 
         # Показываем пример конвертированного файла
         if train_pairs:
             example_file = train_label_dir / train_pairs[0][0].name
             if example_file.exists():
-                print(f"\n📄 Пример конвертированного файла {example_file.name}:")
+                print(f"\nПример конвертированного файла {example_file.name}:")
                 with open(example_file, 'r') as f:
                     for i, line in enumerate(f.readlines()[:3]):
                         print(f"   {line.strip()}")
@@ -193,7 +188,7 @@ class TrainOnCurrentData:
                     if len(parts) > 1:
                         # (len(parts) - 1) / 3 = количество точек
                         num_keypoints = (len(parts) - 1) // 3
-                        print(f"\n📊 Обнаружено {num_keypoints} ключевых точек в файлах")
+                        print(f"\nОбнаружено {num_keypoints} ключевых точек в файлах")
             except:
                 pass
 
@@ -215,8 +210,8 @@ class TrainOnCurrentData:
         with open(yaml_path, 'w') as f:
             yaml.dump(yaml_content, f, default_flow_style=False)
 
-        print(f"\n✅ Создан конфиг: {yaml_path}")
-        print("\n📄 Содержимое:")
+        print(f"\nСоздан конфиг: {yaml_path}")
+        print("\nСодержимое:")
         with open(yaml_path, 'r') as f:
             print(f.read())
 
@@ -227,7 +222,7 @@ class TrainOnCurrentData:
         Проверка датасета перед обучением
         """
         print("\n" + "=" * 60)
-        print("🔍 ПРОВЕРКА ДАТАСЕТА")
+        print("ПРОВЕРКА ДАТАСЕТА")
         print("=" * 60)
 
         train_labels_dir = self.dataset_path / 'labels' / 'train'
@@ -236,15 +231,15 @@ class TrainOnCurrentData:
         label_files = list(train_labels_dir.glob("*.txt"))
         image_files = list(train_images_dir.glob("*.jpg")) + list(train_images_dir.glob("*.png"))
 
-        print(f"📊 Train:")
+        print(f" Train:")
         print(f"   Изображений: {len(image_files)}")
         print(f"   Файлов разметки: {len(label_files)}")
 
         if len(label_files) != len(image_files):
-            print(f"⚠️  Количество изображений и файлов разметки не совпадает!")
+            print(f"Количество изображений и файлов разметки не совпадает!")
 
         # Проверяем первые несколько файлов разметки
-        print("\n📄 Проверка формата файлов разметки:")
+        print("\nПроверка формата файлов разметки:")
         for i, label_file in enumerate(label_files[:5]):
             with open(label_file, 'r') as f:
                 first_line = f.readline().strip()
@@ -259,33 +254,33 @@ class TrainOnCurrentData:
         Обучение модели
         """
         print("\n" + "=" * 60)
-        print("🚀 ЗАПУСК ОБУЧЕНИЯ")
+        print("ЗАПУСК ОБУЧЕНИЯ")
         print("=" * 60)
 
         # Проверяем доступное устройство
         import torch
         if torch.backends.mps.is_available():
             device = 'mps'
-            print("✅ Используется MPS (Metal Performance Shaders)")
+            print("Используется MPS (Metal Performance Shaders)")
         elif torch.cuda.is_available():
             device = 'cuda'
-            print("✅ Используется CUDA")
+            print("Используется CUDA")
         else:
             device = 'cpu'
-            print("⚠️ Используется CPU (будет медленно)")
+            print("Используется CPU (будет медленно)")
 
-        print(f"\n📊 Параметры обучения:")
+        print(f"\nПараметры обучения:")
         print(f"   Эпох: {epochs}")
         print(f"   Размер изображений: {imgsz}")
         print(f"   Размер батча: {batch_size}")
         print(f"   Устройство: {device}")
 
         # Загружаем предобученную модель
-        print("\n📥 Загрузка модели YOLOv8...")
+        print("\nЗагрузка модели YOLOv8...")
         model = YOLO('yolov8m-pose.pt')
 
         # Обучаем
-        print("\n🔄 Начало обучения...\n")
+        print("\nНачало обучения...\n")
 
         try:
             results = model.train(
@@ -309,17 +304,13 @@ class TrainOnCurrentData:
                 verbose=True
             )
 
-            print("\n✅ Обучение завершено!")
-            print(f"📁 Модель сохранена в: {self.output_path / 'iss_detector'}")
+            print("\nОбучение завершено!")
+            print(f"Модель сохранена в: {self.output_path / 'iss_detector'}")
 
             return results
 
         except Exception as e:
-            print(f"\n❌ Ошибка обучения: {e}")
-            print("\n💡 Возможные решения:")
-            print("   1. Проверьте формат файлов разметки")
-            print("   2. Уменьшите размер батча (batch_size=8 или 4)")
-            print("   3. Увеличьте imgsz до 640")
+            print(f"\n Ошибка обучения: {e}")
             return None
 
     def run_full_training(self, epochs=30):
@@ -327,18 +318,18 @@ class TrainOnCurrentData:
         Запуск полного цикла обучения
         """
         print("\n" + "=" * 70)
-        print("🎯 ЗАПУСК ПОЛНОГО ОБУЧЕНИЯ НА ТЕКУЩИХ ДАННЫХ")
+        print("ЗАПУСК ПОЛНОГО ОБУЧЕНИЯ НА ТЕКУЩИХ ДАННЫХ")
         print("=" * 70)
 
         # 1. Подготовка датасета
         dataset_info = self.prepare_dataset()
         if not dataset_info:
-            print("❌ Не удалось подготовить датасет")
+            print("Не удалось подготовить датасет")
             return
 
         # 2. Проверка датасета
         if not self.verify_dataset():
-            print("❌ Проблемы с датасетом")
+            print("Проблемы с датасетом")
             return
 
         # 3. Создание YAML
@@ -349,16 +340,11 @@ class TrainOnCurrentData:
 
         if results:
             print("\n" + "=" * 70)
-            print("✅ ОБУЧЕНИЕ ЗАВЕРШЕНО УСПЕШНО!")
+            print("ОБУЧЕНИЕ ЗАВЕРШЕНО УСПЕШНО!")
             print("=" * 70)
-            print(f"\n📁 Модель сохранена в: {self.output_path / 'iss_detector'}")
+            print(f"\nМодель сохранена в: {self.output_path / 'iss_detector'}")
 
-        return results
-
-
-# ============================================================
-# ЗАПУСК
-# ============================================================
+        return 
 
 if __name__ == "__main__":
     import argparse
@@ -379,7 +365,7 @@ if __name__ == "__main__":
     )
 
     if args.quick:
-        print("\n⚡ ЗАПУСК БЫСТРОГО ОБУЧЕНИЯ (5 ЭПОХ)")
+        print("\nЗАПУСК БЫСТРОГО ОБУЧЕНИЯ (5 ЭПОХ)")
         trainer.run_full_training(epochs=5)
     else:
         trainer.run_full_training(epochs=args.epochs)
