@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-ПОЛНОСТЬЮ РАБОЧИЙ ГРАФИЧЕСКИЙ ИНТЕРФЕЙС для ISS Docking Processor
-Интегрирован со всеми модулями проекта
-"""
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 from pathlib import Path
@@ -22,7 +17,7 @@ try:
     from config import ISS_KEYPOINTS, KEYPOINT_COLORS
     MODULES_LOADED = True
 except ImportError as e:
-    print(f"⚠️ Некоторые модули не загружены: {e}")
+    print(f"Некоторые модули не загружены: {e}")
     MODULES_LOADED = False
 
 
@@ -52,7 +47,7 @@ class ISSProcessorUI:
 
         # Проверка модулей
         if not MODULES_LOADED:
-            self.log("⚠️ ВНИМАНИЕ: Некоторые модули не загружены", 'warning')
+            self.log("Некоторые модули не загружены", 'warning')
             self.log("   Будут использоваться демо-функции", 'warning')
 
     def setup_ui(self):
@@ -74,9 +69,9 @@ class ISSProcessorUI:
         # Меню Запуск
         run_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Запуск", menu=run_menu)
-        run_menu.add_command(label="🚀 Запустить обработку", command=self.start_processing)
-        run_menu.add_command(label="🔍 Быстрый тест", command=self.run_test)
-        run_menu.add_command(label="📊 Расчёт угловой скорости", command=self.run_velocity_calculation)
+        run_menu.add_command(label="Запустить обработку", command=self.start_processing)
+        run_menu.add_command(label="Быстрый тест", command=self.run_test)
+        run_menu.add_command(label="Расчёт угловой скорости", command=self.run_velocity_calculation)
 
         # Меню Помощь
         help_menu = tk.Menu(menubar, tearoff=0)
@@ -91,17 +86,17 @@ class ISSProcessorUI:
 
         # Вкладка 1: Настройки и запуск
         self.tab_main = ttk.Frame(self.notebook)
-        self.notebook.add(self.tab_main, text="🚀 Основное")
+        self.notebook.add(self.tab_main, text="Основное")
         self.setup_main_tab()
 
         # Вкладка 2: Результаты
         self.tab_results = ttk.Frame(self.notebook)
-        self.notebook.add(self.tab_results, text="📊 Результаты")
+        self.notebook.add(self.tab_results, text="Результаты")
         self.setup_results_tab()
 
         # Вкладка 3: Графики
         self.tab_plots = ttk.Frame(self.notebook)
-        self.notebook.add(self.tab_plots, text="📈 Графики")
+        self.notebook.add(self.tab_plots, text="Графики")
         self.setup_plots_tab()
 
         # Статус бар
@@ -110,11 +105,11 @@ class ISSProcessorUI:
 
         # Приветственное сообщение
         self.log("="*60)
-        self.log("🚀 ISS Docking Dataset Processor v1.0 запущен", 'success')
+        self.log("ISS Docking Dataset Processor v1.0 запущен", 'success')
         self.log("="*60)
-        self.log(f"📁 Папка с изображениями: {self.images_path.get()}")
-        self.log(f"📄 CSV файл: {self.csv_path.get()}")
-        self.log(f"📂 Результаты будут в: {self.output_path.get()}")
+        self.log(f"Папка с изображениями: {self.images_path.get()}")
+        self.log(f"CSV файл: {self.csv_path.get()}")
+        self.log(f"Результаты будут в: {self.output_path.get()}")
         self.log("-"*60)
 
     def setup_main_tab(self):
@@ -126,25 +121,25 @@ class ISSProcessorUI:
 
         # Папка с изображениями
         row = 0
-        ttk.Label(settings_frame, text="📁 Папка с изображениями:").grid(row=row, column=0, sticky=tk.W, pady=5)
+        ttk.Label(settings_frame, text="Папка с изображениями:").grid(row=row, column=0, sticky=tk.W, pady=5)
         ttk.Entry(settings_frame, textvariable=self.images_path, width=60).grid(row=row, column=1, padx=5, pady=5)
         ttk.Button(settings_frame, text="Обзор...", command=self.select_images_folder).grid(row=row, column=2, padx=5)
 
         # CSV файл
         row += 1
-        ttk.Label(settings_frame, text="📄 CSV файл с разметкой:").grid(row=row, column=0, sticky=tk.W, pady=5)
+        ttk.Label(settings_frame, text="CSV файл с разметкой:").grid(row=row, column=0, sticky=tk.W, pady=5)
         ttk.Entry(settings_frame, textvariable=self.csv_path, width=60).grid(row=row, column=1, padx=5, pady=5)
         ttk.Button(settings_frame, text="Обзор...", command=self.select_csv_file).grid(row=row, column=2, padx=5)
 
         # Папка для результатов
         row += 1
-        ttk.Label(settings_frame, text="📂 Папка для результатов:").grid(row=row, column=0, sticky=tk.W, pady=5)
+        ttk.Label(settings_frame, text="Папка для результатов:").grid(row=row, column=0, sticky=tk.W, pady=5)
         ttk.Entry(settings_frame, textvariable=self.output_path, width=60).grid(row=row, column=1, padx=5, pady=5)
         ttk.Button(settings_frame, text="Обзор...", command=self.select_output_folder).grid(row=row, column=2, padx=5)
 
         # Модель и параметры
         row += 1
-        ttk.Label(settings_frame, text="🤖 Модель YOLO:").grid(row=row, column=0, sticky=tk.W, pady=5)
+        ttk.Label(settings_frame, text="Модель YOLO:").grid(row=row, column=0, sticky=tk.W, pady=5)
         model_combo = ttk.Combobox(settings_frame, textvariable=self.model_name,
                                    values=["yolov8n-pose.pt", "yolov8s-pose.pt", "yolov8m-pose.pt",
                                           "yolov8l-pose.pt", "yolov8x-pose.pt"], width=20)
@@ -162,22 +157,22 @@ class ISSProcessorUI:
         button_frame = ttk.Frame(control_frame)
         button_frame.pack()
 
-        self.start_button = ttk.Button(button_frame, text="🚀 Запустить обработку",
+        self.start_button = ttk.Button(button_frame, text="Запустить обработку",
                                        command=self.start_processing, width=20)
         self.start_button.grid(row=0, column=0, padx=5, pady=5)
 
-        self.test_button = ttk.Button(button_frame, text="🔍 Быстрый тест",
+        self.test_button = ttk.Button(button_frame, text="Быстрый тест",
                                       command=self.run_test, width=15)
         self.test_button.grid(row=0, column=1, padx=5, pady=5)
 
-        self.stop_button = ttk.Button(button_frame, text="⏹ Остановить",
+        self.stop_button = ttk.Button(button_frame, text="Остановить",
                                       command=self.stop_processing, width=15, state=tk.DISABLED)
         self.stop_button.grid(row=0, column=2, padx=5, pady=5)
 
-        ttk.Button(button_frame, text="📊 Расчёт скорости",
+        ttk.Button(button_frame, text="Расчёт скорости",
                   command=self.run_velocity_calculation, width=15).grid(row=0, column=3, padx=5, pady=5)
 
-        ttk.Button(button_frame, text="📂 Открыть папку",
+        ttk.Button(button_frame, text="Открыть папку",
                   command=self.open_output_folder, width=15).grid(row=0, column=4, padx=5, pady=5)
 
         # ===== Прогресс =====
@@ -213,7 +208,7 @@ class ISSProcessorUI:
         """Настройка вкладки результатов"""
 
         # Заголовок
-        ttk.Label(self.tab_results, text="📊 Результаты обработки",
+        ttk.Label(self.tab_results, text="Результаты обработки",
                  font=('Arial', 14, 'bold')).pack(pady=10)
 
         # Фрейм для статистики
@@ -224,11 +219,11 @@ class ISSProcessorUI:
         self.stats_text.pack(pady=5)
 
         # Кнопка обновления
-        ttk.Button(self.tab_results, text="🔄 Обновить статистику",
+        ttk.Button(self.tab_results, text="Обновить статистику",
                   command=self.update_stats).pack(pady=5)
 
         # Кнопка открытия результатов
-        ttk.Button(self.tab_results, text="📂 Открыть папку с результатами",
+        ttk.Button(self.tab_results, text="Открыть папку с результатами",
                   command=self.open_output_folder).pack(pady=5)
 
         # Заполняем начальной статистикой
@@ -237,24 +232,24 @@ class ISSProcessorUI:
     def setup_plots_tab(self):
         """Настройка вкладки графиков"""
 
-        ttk.Label(self.tab_plots, text="📈 Графики угловой скорости",
+        ttk.Label(self.tab_plots, text="Графики угловой скорости",
                  font=('Arial', 14, 'bold')).pack(pady=10)
 
         # Информация о графиках
         info_text = tk.Text(self.tab_plots, height=10, width=80, font=('Monaco', 10))
         info_text.pack(pady=10, padx=10)
         info_text.insert(tk.END, "Графики будут доступны после обработки данных:\n\n")
-        info_text.insert(tk.END, "• tracking_results.png - основной график угловой скорости\n")
-        info_text.insert(tk.END, "• angular_velocity_analysis.png - детальный анализ\n\n")
+        info_text.insert(tk.END, "tracking_results.png - основной график угловой скорости\n")
+        info_text.insert(tk.END, "angular_velocity_analysis.png - детальный анализ\n\n")
         info_text.insert(tk.END, "Для просмотра графиков нажмите кнопку ниже:")
         info_text.config(state=tk.DISABLED)
 
         # Кнопка открытия графиков
-        ttk.Button(self.tab_plots, text="📊 Открыть графики",
+        ttk.Button(self.tab_plots, text="Открыть графики",
                   command=self.open_plots).pack(pady=10)
 
         # Кнопка расчёта скорости
-        ttk.Button(self.tab_plots, text="🔄 Выполнить расчёт скорости",
+        ttk.Button(self.tab_plots, text="Выполнить расчёт скорости",
                   command=self.run_velocity_calculation).pack(pady=5)
 
     def log(self, message, tag='info'):
@@ -270,7 +265,7 @@ class ISSProcessorUI:
                                          initialdir=self.images_path.get())
         if folder:
             self.images_path.set(folder)
-            self.log(f"📁 Выбрана папка с изображениями: {folder}", 'success')
+            self.log(f"Выбрана папка с изображениями: {folder}", 'success')
 
     def select_csv_file(self):
         """Выбор CSV файла"""
@@ -281,7 +276,7 @@ class ISSProcessorUI:
         )
         if file:
             self.csv_path.set(file)
-            self.log(f"📄 Выбран CSV файл: {file}", 'success')
+            self.log(f"Выбран CSV файл: {file}", 'success')
 
     def select_output_folder(self):
         """Выбор папки для результатов"""
@@ -289,14 +284,14 @@ class ISSProcessorUI:
                                          initialdir=self.output_path.get())
         if folder:
             self.output_path.set(folder)
-            self.log(f"📂 Результаты будут сохраняться в: {folder}", 'success')
+            self.log(f"Результаты будут сохраняться в: {folder}", 'success')
 
     def open_output_folder(self):
         """Открыть папку с результатами"""
         folder = self.output_path.get()
         if os.path.exists(folder):
             os.system(f'open "{folder}"')
-            self.log(f"📂 Открыта папка: {folder}")
+            self.log(f"Открыта папка: {folder}")
         else:
             messagebox.showinfo("Информация", f"Папка еще не создана:\n{folder}")
 
@@ -319,23 +314,23 @@ class ISSProcessorUI:
             json_files = list(output_dir.glob("*.json"))
             png_files = list(output_dir.glob("*.png"))
 
-            stats = f"""📊 СТАТИСТИКА РЕЗУЛЬТАТОВ
+            stats = f"""СТАТИСТИКА РЕЗУЛЬТАТОВ
 {'='*50}
 
-📁 Папка: {output_dir}
+Папка: {output_dir}
 
-📄 Файлы разметки (.txt): {len(txt_files)} шт.
-📊 JSON файлы: {len(json_files)} шт.
-🖼️ Графики: {len(png_files)} шт.
+Файлы разметки (.txt): {len(txt_files)} шт.
+JSON файлы: {len(json_files)} шт.
+Графики: {len(png_files)} шт.
 
-📈 Примеры файлов:
+Примеры файлов:
 """
             # Показываем первые 5 файлов
             for i, f in enumerate(txt_files[:5]):
-                stats += f"   • {f.name}\n"
+                stats += f"   {f.name}\n"
 
             if len(txt_files) > 5:
-                stats += f"   • ... и ещё {len(txt_files)-5} файлов\n"
+                stats += f"    ... и ещё {len(txt_files)-5} файлов\n"
 
             self.stats_text.insert(tk.END, stats)
         else:
@@ -344,26 +339,26 @@ class ISSProcessorUI:
 
     def run_test(self):
         """Быстрый тест"""
-        self.log("🔍 Запуск быстрого теста...", 'header')
+        self.log("Запуск быстрого теста...", 'header')
 
         # Проверка путей
         images_path = Path(self.images_path.get())
         csv_path = Path(self.csv_path.get())
 
         if not images_path.exists():
-            self.log(f"❌ Папка не найдена: {images_path}", 'error')
+            self.log(f"Папка не найдена: {images_path}", 'error')
             return
 
         if not csv_path.exists():
-            self.log(f"❌ CSV файл не найден: {csv_path}", 'error')
+            self.log(f"CSV файл не найден: {csv_path}", 'error')
             return
 
-        self.log(f"✅ Папка с изображениями: {images_path}", 'success')
-        self.log(f"✅ CSV файл: {csv_path}", 'success')
+        self.log(f"Папка с изображениями: {images_path}", 'success')
+        self.log(f"CSV файл: {csv_path}", 'success')
 
         # Подсчет файлов
         image_files = list(images_path.glob("*.jpg")) + list(images_path.glob("*.png"))
-        self.log(f"📸 Найдено изображений: {len(image_files)}", 'info')
+        self.log(f"Найдено изображений: {len(image_files)}", 'info')
 
         # Демонстрация
         self.progress_bar['value'] = 50
@@ -376,26 +371,26 @@ class ISSProcessorUI:
         """Завершение теста"""
         self.progress_bar['value'] = 100
         self.status_label.config(text="Тест завершен")
-        self.log("✅ Быстрый тест успешно выполнен!", 'success')
-        self.log("📊 Все системы работают корректно", 'success')
+        self.log("Быстрый тест успешно выполнен!", 'success')
+        self.log("Все системы работают корректно", 'success')
         messagebox.showinfo("Тест", "Быстрый тест выполнен успешно!")
 
     def run_velocity_calculation(self):
         """Запуск расчёта угловой скорости"""
-        self.log("📊 Запуск расчёта угловой скорости...", 'header')
+        self.log("Запуск расчёта угловой скорости...", 'header')
 
         # Проверяем наличие графика
         results_path = Path(self.output_path.get())
         tracking_graph = results_path / "tracking_results.png"
 
         if tracking_graph.exists():
-            self.log(f"✅ График найден: {tracking_graph}", 'success')
+            self.log(f"График найден: {tracking_graph}", 'success')
             os.system(f'open "{tracking_graph}"')
         else:
-            self.log("⚠️ График не найден, запускаю демонстрационный расчёт...", 'warning')
+            self.log("График не найден, запускаю демонстрационный расчёт...", 'warning')
 
             # Демонстрационные данные
-            self.log("📈 Демонстрационные результаты:", 'info')
+            self.log("Демонстрационные результаты:", 'info')
             self.log("   Средняя ω: -2.828741 рад/с", 'success')
             self.log("   Медианная ω: -2.828741 рад/с", 'success')
             self.log("   Стандартное отклонение: 0.000000 рад/с", 'success')
@@ -426,17 +421,17 @@ class ISSProcessorUI:
             plot_path = output_path / "tracking_results.png"
             plt.savefig(plot_path, dpi=150)
 
-            self.log(f"✅ Демо-график создан: {plot_path}", 'success')
+            self.log(f"Демо-график создан: {plot_path}", 'success')
 
             # Открываем
             os.system(f'open "{plot_path}"')
 
         except Exception as e:
-            self.log(f"❌ Ошибка создания графика: {e}", 'error')
+            self.log(f"Ошибка создания графика: {e}", 'error')
 
     def start_processing(self):
         """Запуск обработки (симуляция)"""
-        self.log("🚀 Запуск обработки данных...", 'header')
+        self.log("Запуск обработки данных...", 'header')
 
         self.is_processing = True
         self.start_button.config(state=tk.DISABLED)
@@ -460,7 +455,7 @@ class ISSProcessorUI:
             self.status_label.config(text=f"Обработка... {step}%")
 
             if step % 10 == 0:
-                self.log(f"🔄 Прогресс: {step}% - обработано {step*100} изображений", 'info')
+                self.log(f"Прогресс: {step}% - обработано {step*100} изображений", 'info')
 
             # Планируем следующий шаг
             self.root.after(200, self.simulate_processing, step + 5)
@@ -477,12 +472,12 @@ class ISSProcessorUI:
         self.test_button.config(state=tk.NORMAL)
         self.stop_button.config(state=tk.DISABLED)
 
-        self.log("✅ ОБРАБОТКА ЗАВЕРШЕНА!", 'success')
-        self.log("📊 Статистика:", 'header')
-        self.log("   • Всего обработано: 10,000 изображений", 'success')
-        self.log("   • Ключевых точек: 12 на кадр", 'success')
-        self.log("   • Формат: YOLO .txt + JSON", 'success')
-        self.log(f"📁 Результаты сохранены в: {self.output_path.get()}", 'info')
+        self.log("ОБРАБОТКА ЗАВЕРШЕНА!", 'success')
+        self.log("Статистика:", 'header')
+        self.log("   Всего обработано: 10,000 изображений", 'success')
+        self.log("   Ключевых точек: 12 на кадр", 'success')
+        self.log("   Формат: YOLO .txt + JSON", 'success')
+        self.log(f"Результаты сохранены в: {self.output_path.get()}", 'info')
 
         # Обновляем статистику
         self.update_stats()
@@ -499,11 +494,11 @@ class ISSProcessorUI:
         self.test_button.config(state=tk.NORMAL)
         self.stop_button.config(state=tk.DISABLED)
 
-        self.log("⏹ Обработка остановлена пользователем", 'warning')
+        self.log("Обработка остановлена пользователем", 'warning')
 
     def check_modules(self):
         """Проверка загруженных модулей"""
-        self.log("🔍 Проверка модулей проекта...", 'header')
+        self.log("Проверка модулей проекта...", 'header')
 
         modules = [
             ('processor', 'ISSDataLoader' in dir() if 'ISSDataLoader' in globals() else False),
@@ -512,61 +507,12 @@ class ISSProcessorUI:
         ]
 
         for module_name, loaded in modules:
-            status = "✅" if loaded else "❌"
+            status = "ok" if loaded else "bad"
             self.log(f"   {status} {module_name}", 'success' if loaded else 'error')
 
         if not MODULES_LOADED:
-            self.log("\n⚠️ Используются демо-функции", 'warning')
+            self.log("\nИспользуются демо-функции", 'warning')
 
-    def show_about(self):
-        """О программе"""
-        about_text = """🚀 ISS Docking Dataset Processor v1.0
-
-Разработчик: Дарья
-Дата: 11 марта 2026 г.
-
-Функциональность:
-• Автоматическая пред-разметка 12 ключевых точек МКС
-• Графический интерфейс для удобной работы
-• Расчёт угловой скорости по видеоряду
-• Визуализация результатов
-
-Обработано: 10,000 изображений
-Скорость вращения: -2.83 рад/с (по часовой стрелке)
-
-© 2026 Все права защищены
-        """
-        messagebox.showinfo("О программе", about_text)
-
-    def show_help(self):
-        """Инструкция"""
-        help_text = """📖 ИНСТРУКЦИЯ ПО ИСПОЛЬЗОВАНИЮ
-
-1️⃣ ПОДГОТОВКА
-   • Выберите папку с изображениями (train/)
-   • Выберите CSV файл (train.csv)
-   • Выберите папку для результатов
-
-2️⃣ ЗАПУСК
-   • Быстрый тест - проверка за 1 минуту
-   • Запуск обработку - полная обработка 10,000 кадров
-
-3️⃣ РЕЗУЛЬТАТЫ
-   • Открыть папку - просмотр результатов
-   • Расчёт скорости - вычисление угловой скорости
-
-4️⃣ ГРАФИКИ
-   • Открыть графики - просмотр визуализации
-
-5️⃣ ГОРЯЧИЕ КЛАВИШИ
-   • Cmd+O - выбрать папку
-   • Cmd+R - запустить обработку
-   • Cmd+T - быстрый тест
-   • Cmd+Q - выход
-
-📌 Совет: Сначала выполните быстрый тест!
-        """
-        messagebox.showinfo("Инструкция", help_text)
 
 
 def main():
